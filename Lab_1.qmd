@@ -1,0 +1,174 @@
+---
+title: "Lab 1: Building a Data Pipeline"
+author: "Natalia Fic"
+date: "February 1, 2023"
+toc: true
+format: html
+editor: visual
+bibliography: ./documentation/references.bib
+csl: ./documentation/apa-6th-edition.csl
+---
+
+## Lab Introduction
+
+This document accompanies the [Lab 1 description file](https://up570s23.netlify.app/assignments/labs/01_datapipeline.html) on our course website. You will modify this file based upon the below guidelines and will add other files as necessary to the root folder.
+
+In our next lab, you'll learn how to connect RStudio to Github, and will ultimately upload your work in this lab to a special assignment submission repository. For now, complete the lab and hold onto the files. We'll practice pulling and pushing your lab content in our next session.
+
+## Lab Tasks
+
+Complete each of the following tasks as described.
+
+1.  Utilize our Lab 1 code base and guidelines to set up RStudio for this semester's workflows.
+
+2.  Programmatically create a file structure within the current project directory and organize existing files as appropriate.
+
+```{r}
+"header"
+#Title: Setting up a New Project
+#Author: Natalia Fic
+#Email: nfic2@illinois.edu
+#Date: 29/01/2023
+
+#Script Name: New Project Script 
+
+#Description: 
+
+#Notes: 
+
+#Set up the working environment 
+
+#Load required libraries 
+load_packages <- c("tidyverse", "sf")
+
+#Set global options 
+
+#Define functions 
+
+#Main script 
+
+#End of script 
+
+#Setting Working Directory
+setwd("~/Desktop/Nanalysis/Lab1/")
+#Used existing folder (Lab 1 to create relative path for project file)
+
+
+#Create project subdirectories"
+
+dir.create("data")
+dir.create("raw_data")
+dir.create("processed_data")
+dir.create("metadata")
+dir.create("documentation")
+dir.create("output")
+dir.create("scripts")
+dir.create("quarto")
+
+
+
+```
+
+3.  The repository you're working in includes a dataset containing demographic profiles for Chicago Community Areas prepared by the Chicago Metropolitan Agency for Planning (CMAP) as part of their Community Data Snapshots program. Create a script that does the following: A. Imports the data. B. Calculates the numeric population change for community areas between 2010 and 2020 as well as the percentage change between 2010 and 2020, and places this into a new variable in the dataset. Percentage change: (Pop_Period2 - Pop_Period1) / Pop_Period1. C. Adapts the following code to produce a plot that describes the percentage change in population. You will need to modify to fit your data and variable names.
+
+```{r}
+#Loading Required libraries
+
+library(dplyr)
+library(ggplot2)
+library(forcats)
+
+#Importing Data 
+CCAData <- read.csv(file = 'ReferenceCCAProfiles20162020.csv')
+View(CCAData)
+
+#Calculating Population Change
+CCAData$PopChange <- (CCAData$X2020_POP - CCAData$X2010_POP)
+
+#Calculating Percent Change
+CCAData$PerChange <- ((CCAData$X2020_POP - CCAData$X2010_POP) / (CCAData$X2010_POP))
+CCAData$PercentChange <- CCAData$PerChange*100
+
+
+#Plotting Population Percent Change
+#Plotting Population Percent Change 
+library (lattice)
+attach(mtcars)
+barchart(GEOG~PercentChange, main= "Percent Change in Population Across Community Areas in Chicago" , data=CCAData)
+```
+
+```{r}
+#Create new table of community area and percent change 
+NewPop <- CCAData[c(2, 261)]
+
+#Separate by value 
+
+PopGreater <- filter(NewPop, PercentChange > 10)
+PopLesser <- filter(NewPop, PercentChange < -10)
+
+```
+
+### Analysis of Population Change Across Community Areas in Chicago
+
+#### Introduction
+
+A brief analysis was performed on the 77 community areas in Chicago, ranging from the south side of the city to the north and west sides. Community areas are considered non-changing boundaries as according to the City of Chicago [@city of chicago]. Emphasis was placed on calculating the population change and percentages, in order to determine where the city was facing an influx or loss of residents. Information about changing demographics and population is vital to urban planners when determining the equitable distribution of resources within the city and can reveal previously unknown disparities [@geronimus1999poverty]. The spatial distribution of resources throughout the city varies greatly by neighborhood and community area, creating disparities in educational, employment, and health systems. Scholars conclude that the south side of Chicago has continuously faced segregation across institutions including educational, social, and physical inequalities. [@baron1963history]. Poverty in the Chatham community area increased by about 7% from the time period of 2000 to 2010 [@moore2016south].\[\^1\]: Poverty rates have been further examined by several governmental and non profit organizations in the city.
+
+*Research question: Which factors affect population change?*
+
+![Map of Community Areas in Chicago](Chicago_community_areas_map.svg)
+
+#### Methods
+
+Data was collected by the Chicago Metropolitan Agency for Planning. The following tables indicate population change of greater than 10% or less than 10% in all community areas of Chicago.
+
+##### Table 1
+
+##### 
+
+```{r}
+library(knitr)
+kable(PopGreater ,caption = "Community Areas with an Increase in Population of more than 10%")
+```
+
+##### Table 2
+
+```{r}
+kable(PopLesser ,caption = "Community Areas with an Decrease in Population of more than 10%")
+```
+
+##### \[\^1\]: More information about the CMAP (Chicago Metropolitan Agency for Planning) can be found here.
+
+#### Conclusion
+
+We can conclude that that a number of community areas located on the south side of Chicago experienced a significant population decrease. West Englewood, West Pullman, South Chicago, Roseland, Fuller Park, Englewood, and Burnside are all located on the south side of the city. Further analysis is needed before making further conclusions about the changing population.
+
+#### References
+
+::: {#refs}
+:::
+
+#### Footnotes
+
+1.  See further studies conducted by CMAP.
+
+<!-- -->
+
+    D. Produce a table that lists the names and percentage population change for those community areas with an increase in population of more than 10 percent.
+
+    E. Produce a table that lists the names and percentage population change for those community areas with an decrease in population of more than 10 percent.
+
+4.  In this Quarto Markdown document, use your visualization and two tables to write a short summary of population change for Chicago Community Areas. A. Format your short document using appropriate section headers. B. Include an example of a footnote. C. Include bibliographic citations including a scholarly journal article, a book, and a website (these do not need to correspond to the substantive content of your report - they are simply an opportunity to implement a formatted bibliography in Quarto Markdown). Citations should be in MLA format. D. Modify the YAML header to include your name and the date.
+
+5.  Hold onto your completed mini-analysis until our next lab session where you will learn to upload this file to Github.
+
+That's it! We're looking forward to seeing what you come up with!
+
+#### Post -- Assignment Reflection:
+
+##### 
+
+1.  I am proud of navigating through this assignment with the use of my previous skills in Data Science for Planners. I am also proud of utilizing the resources presented to me in a productive manner.
+2.  If I were to start this assignment over again I would familiarize myself with Quarto Markdown before attempting to write or code. We learned a very different approach of using R in our Data Science for Planners class last semester and I am not used to the Quarto/Markdown flow.I find Quarto very interesting and am looking forward to implementing certain tools throughout the semester and producing great work! Another thing I would do if I were to start over is review the basics of coding. Since I have not coded or practiced R since last semester my skills as not as sharp. A part of me panicked when starting the lab since I had forgotten previous concepts.
+3.  I would simply like to know your suggestions for creating easier workflows and ways of managing/organizing data, especially when it comes to analyses. I experienced the most confusion when creating the bibliography and citing sources, most specifically with websites. I could also not find the MLA citation style in the CSL github repository. Please let me know what I can work on! Any suggestions or advice are appreciated.
+4.  On a scale of 1 to 10 I believe my work is at a level 5. I do not feel necessarily proud or ashamed of my work, but am relieved that I have completed and troubleshooted my issues with the help of the class. We all helped each other and I felt very supported in the environment. I would have liked to conduct a more in-depth analysis of population change in Chicago (there were some very apparent trends which I noticed), but I am aware that was not the objective of the first lab.
